@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Fall2025_Project3_amstephenson3.Models.Movie>
+
+@{
+    ViewData["Title"] = "Movies";
+}
+
+<h1>Movies</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
+</p>
+
+@if (Model is null || !Model.Any())
+{
+    <div class="alert alert-info">No movies yet. Click <strong>Create New</strong> to add one.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>IMDB</th>
+                <th>Genre</th>
+                <th>Year</th>
+                <th>Poster</th>
+                <th style="width: 180px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(item.ImdbUrl))
+                        {
+                            <a href="@item.ImdbUrl" target="_blank" rel="noopener">IMDB</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+                    <td>@item.Genre</td>
+                    <td>@(item.Year?.ToString() ?? "—")</td>
+                    <td>
+                        @if (item.Poster is not null)
+                        {
+                            <img src="@Url.Action("Poster", "Movies", new { id = item.Id })"
+                                 alt="Poster"
+                                 style="height:80px; border:1px solid #ddd; padding:2px; border-radius:6px;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No poster</span>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

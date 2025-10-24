@@ -1,0 +1,20 @@
+﻿@model Fall2025_Project3_amstephenson3.Controllers.ActorMovieRowVM
+@{
+    ViewData["Title"] = "Delete Relationship";
+}
+<h1>Delete Relationship</h1>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-2">Actor</dt>
+    <dd class="col-sm-10">@Model.ActorName</dd>
+    <dt class="col-sm-2">Movie</dt>
+    <dd class="col-sm-10">@Model.MovieTitle</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" name="actorId" value="@Model.ActorId" />
+    <input type="hidden" name="movieId" value="@Model.MovieId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

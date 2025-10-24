@@ -1,0 +1,28 @@
+﻿@model Fall2025_Project3_amstephenson3.Controllers.ActorMovieRowVM
+@{
+    ViewData["Title"] = "Relationship Details";
+}
+<h1>Relationship Details</h1>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-2">Actor</dt>
+    <dd class="col-sm-10">@Model.ActorName</dd>
+
+    <dt class="col-sm-2">Movie</dt>
+    <dd class="col-sm-10">@Model.MovieTitle</dd>
+</dl>
+
+<div class="mt-3 d-flex gap-2">
+    <a class="btn btn-primary"
+       asp-action="Edit"
+       asp-route-actorId="@Model.ActorId"
+       asp-route-movieId="@Model.MovieId">Edit</a>
+
+    <a class="btn btn-outline-danger"
+       asp-action="Delete"
+       asp-route-actorId="@Model.ActorId"
+       asp-route-movieId="@Model.MovieId">Delete</a>
+
+    <a class="btn btn-secondary" asp-action="Index">Back</a>
+</div>

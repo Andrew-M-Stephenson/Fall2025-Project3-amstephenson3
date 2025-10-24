@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Fall2025_Project3_amstephenson3.Controllers.ActorMovieRowVM>
+
+@{
+    ViewData["Title"] = "Actor–Movie";
+}
+
+<h1>Actor–Movie</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Add Relationship</a>
+</p>
+
+@if (ViewData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+@if (Model is null || !Model.Any())
+{
+    <div class="alert alert-info">No relationships yet. Click <strong>Add Relationship</strong> to create one.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Actor</th>
+                <th>Movie</th>
+                <th style="width: 220px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Actors" asp-action="Details" asp-route-id="@item.ActorId">
+                            @item.ActorName
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.MovieId">
+                            @item.MovieTitle
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary"
+                           asp-action="Details"
+                           asp-route-actorId="@item.ActorId"
+                           asp-route-movieId="@item.MovieId">Details</a>
+
+                        <a class="btn btn-sm btn-outline-primary ms-1"
+                           asp-action="Edit"
+                           asp-route-actorId="@item.ActorId"
+                           asp-route-movieId="@item.MovieId">Edit</a>
+
+                        <a class="btn btn-sm btn-outline-danger ms-1"
+                           asp-action="Delete"
+                           asp-route-actorId="@item.ActorId"
+                           asp-route-movieId="@item.MovieId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

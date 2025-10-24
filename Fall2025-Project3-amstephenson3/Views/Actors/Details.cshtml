@@ -1,0 +1,106 @@
+﻿@model Fall2025_Project3_amstephenson3.Controllers.ActorDetailsViewModel
+@{
+    ViewData["Title"] = "Actor Details";
+}
+
+<h1>@Model.Actor.Name</h1>
+
+<div class="row">
+    <div class="col-lg-8">
+        <dl class="row">
+            <dt class="col-sm-3">Gender</dt>
+            <dd class="col-sm-9">@Model.Actor.Gender</dd>
+
+            <dt class="col-sm-3">Age</dt>
+            <dd class="col-sm-9">@Model.Actor.Age</dd>
+
+            <dt class="col-sm-3">IMDB</dt>
+            <dd class="col-sm-9">
+                @if (!string.IsNullOrWhiteSpace(Model.Actor.ImdbUrl))
+                {
+                    <a href="@Model.Actor.ImdbUrl" target="_blank" rel="noopener">@Model.Actor.ImdbUrl</a>
+                }
+                else
+                {
+                    <span class="text-muted">—</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Photo</dt>
+            <dd class="col-sm-9">
+                @if (Model.Actor.Photo is not null)
+                {
+                    <img src="@Url.Action("Photo", "Actors", new { id = Model.Actor.Id })"
+                         alt="Photo" style="max-height:240px; border:1px solid #ddd; padding:4px; border-radius:8px;" />
+                }
+                else
+                {
+                    <span class="text-muted">No photo</span>
+                }
+            </dd>
+        </dl>
+
+        <h4 class="mt-4">Movies with @Model.Actor.Name</h4>
+        @if (Model.Movies?.Any() == true)
+        {
+            <ul>
+                @foreach (var m in Model.Movies)
+                {
+                    <li>
+                        <a asp-controller="Movies" asp-action="Details" asp-route-id="@m.Id">@m.Title</a>
+                        @if (!string.IsNullOrWhiteSpace(m.ImdbUrl))
+                        {
+                            <text> — <a href="@m.ImdbUrl" target="_blank" rel="noopener">IMDB</a></text>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="text-muted">No movies linked yet.</div>
+        }
+    </div>
+</div>
+
+<hr class="my-4" />
+
+<h3>
+    Overall sentiment: <strong>@Model.OverallLabel</strong>
+    <small class="text-muted">(avg @Model.AverageCompound.ToString("0.00"))</small>
+</h3>
+
+@if (Model.Tweets?.Any() == true)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tweet</th>
+                <th style="width:160px;">Sentiment</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model.Tweets)
+            {
+                <tr>
+                    <td>@t.Text</td>
+                    <td>
+                        <span class="badge @(t.Label == "Positive" ? "bg-success" : t.Label == "Negative" ? "bg-danger" : "bg-secondary")">
+                            @t.Label
+                        </span>
+                        <span class="text-muted ms-2">@t.Compound.ToString("0.00")</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No AI-generated tweets yet.</div>
+}
+
+<div class="mt-3 d-flex gap-2">
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Actor.Id">Edit</a>
+    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+</div>

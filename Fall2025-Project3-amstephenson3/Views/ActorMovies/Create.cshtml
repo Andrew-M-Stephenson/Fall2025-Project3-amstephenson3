@@ -1,0 +1,40 @@
+﻿@model Fall2025_Project3_amstephenson3.Models.ActorMovie
+@{
+    ViewData["Title"] = "Add Relationship";
+}
+<h1>Add Relationship</h1>
+<hr />
+
+<!-- Explicit path + post + novalidate to avoid client-side blockers -->
+<form id="amForm" action="/ActorMovies/Create" method="post" novalidate>
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label class="form-label" for="ActorId">Actor</label>
+        <select id="ActorId" name="ActorId" class="form-select" asp-items="ViewBag.ActorId"></select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="MovieId">Movie</label>
+        <select id="MovieId" name="MovieId" class="form-select" asp-items="ViewBag.MovieId"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <!-- DO NOT load validation scripts yet; we want a raw submit -->
+    @* @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } *@
+
+    <script>
+        // Log & force submit in case any script calls preventDefault
+        const f = document.getElementById('amForm');
+        const btn = document.getElementById('saveBtn');
+        f.addEventListener('submit', (e) => console.log('submit fired; action=', f.action));
+        btn.addEventListener('click', (e) => {
+          console.log('Save clicked — forcing submit');
+          f.submit(); // bypass any preventDefault
+        });
+    </script>
+}
