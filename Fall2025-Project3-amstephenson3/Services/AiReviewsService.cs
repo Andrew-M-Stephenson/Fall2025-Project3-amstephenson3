@@ -41,17 +41,14 @@ namespace Fall2025_Project3_amstephenson3.Services
                 messages = new object[]
                 {
                     new { role = "system", content = "You are a helpful assistant. Return ONLY valid JSON; no extra text." },
-                    new
-                    {
-                        role = "user",
+                    new { role = "user",
                         content = $@"
-Generate ten short, varied, natural-language mini-reviews for the movie '{movieTitle}'.
-{castLine}
-Keep each review to 1–2 sentences, a mix of positive/neutral/lightly critical. No hashtags or @mentions.
-Return ONLY JSON with this exact shape:
-{{ ""reviews"": [""..."",""..."" ] }}
-Ensure there are exactly 10 strings in ""reviews"" and no extra properties."
-                    }
+                        Generate ten short, varied, natural-language mini-reviews for the movie '{movieTitle}'.
+                        {castLine}
+                        Keep each review to 1–2 sentences, a mix of positive/neutral/lightly critical. No hashtags or @mentions.
+                        Return ONLY JSON with this exact shape:
+                        {{ ""reviews"": [""..."",""..."" ] }}
+                        Ensure there are exactly 10 strings in ""reviews"" and no extra properties."}
                 },
                 temperature = 0.7,
                 max_tokens = 800,
@@ -88,7 +85,7 @@ Ensure there are exactly 10 strings in ""reviews"" and no extra properties."
             }
             catch
             {
-                // Fallback if model ignored JSON mode: split lines
+                //fallback
                 return FallbackExtractLines(innerText, 10);
             }
         }

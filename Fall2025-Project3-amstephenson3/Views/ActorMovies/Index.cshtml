@@ -21,7 +21,7 @@
 }
 else
 {
-    <table class="table table-striped align-middle">
+    <table id="grid" class="table table-striped align-middle">
         <thead>
             <tr>
                 <th>Actor</th>
@@ -63,4 +63,10 @@ else
             }
         </tbody>
     </table>
+}
+
+@section Scripts {
+    <script>
+        $(function () { $('#grid').DataTable({ paging: true, searching: true, order: [], autoWidth: false }); });
+    </script>
 }

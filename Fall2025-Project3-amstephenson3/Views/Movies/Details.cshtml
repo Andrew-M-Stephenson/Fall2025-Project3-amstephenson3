@@ -47,7 +47,7 @@
     </div>
 </div>
 
-<!-- Cast -->
+<!--Cast-->
 <h4 class="mt-4">Cast</h4>
 @if (Model.Actors?.Any() == true)
 {
@@ -65,7 +65,7 @@ else
 
 <hr class="my-4" />
 
-<!-- AI Reviews + Sentiment -->
+<!--AI reviews-->
 <h3>
     Overall sentiment: <strong>@Model.OverallLabel</strong>
     <small class="text-muted">(avg @Model.AverageCompound.ToString("0.00"))</small>

@@ -41,14 +41,12 @@
                 <span asp-validation-for="ImdbUrl" class="text-danger"></span>
             </div>
 
-            <!-- File upload for Photo (stored as byte[]) -->
+            <!--File upload for Photo-->
             <div class="form-group mb-4">
                 <label class="form-label">Photo</label>
                 <input type="file" name="photoFile" class="form-control" accept="image/*" />
                 <small class="text-muted">JPEG/PNG recommended; ~2MB max.</small>
             </div>
-
-            @* Do NOT expose Photo/PhotoContentType fields; controller sets them from the uploaded file *@
 
             <div class="d-flex gap-2">
                 <input type="submit" value="Create" class="btn btn-primary" />

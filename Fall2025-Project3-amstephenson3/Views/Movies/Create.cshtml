@@ -41,14 +41,12 @@
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
 
-            <!-- File upload for Poster (stored as byte[]) -->
+            <!--file upload for Poster-->
             <div class="form-group mb-4">
                 <label class="form-label">Poster</label>
                 <input type="file" name="posterFile" class="form-control" accept="image/*" />
                 <small class="text-muted">JPEG/PNG recommended; ~2MB max.</small>
             </div>
-
-            @* Poster/PosterContentType set in controller *@
 
             <div class="d-flex gap-2">
                 <input type="submit" value="Create" class="btn btn-primary" />

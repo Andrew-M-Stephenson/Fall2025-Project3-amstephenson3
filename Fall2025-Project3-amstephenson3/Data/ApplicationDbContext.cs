@@ -17,7 +17,7 @@ namespace Fall2025_Project3_amstephenson3.Data
         {
             base.OnModelCreating(builder);
 
-            // Composite PK for join and no duplicates
+            //composite PK for join/no duplicates
             builder.Entity<ActorMovie>()
                 .HasKey(am => new { am.ActorId, am.MovieId });
 

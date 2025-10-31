@@ -18,7 +18,7 @@ namespace Fall2025_Project3_amstephenson3.Models
         [Display(Name = "IMDB URL"), Url]
         public string? ImdbUrl { get; set; }
 
-        // Photo stored in DB
+        //photo stored in DB
         public byte[]? Photo { get; set; }
         public string? PhotoContentType { get; set; }
 

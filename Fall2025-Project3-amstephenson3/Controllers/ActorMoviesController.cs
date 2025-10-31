@@ -13,7 +13,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
         private readonly ApplicationDbContext _context;
         public ActorMoviesController(ApplicationDbContext context) => _context = context;
 
-        // GET: /ActorMovies
+        //GET:
         public async Task<IActionResult> Index()
         {
             var rows = await _context.ActorMovies
@@ -32,7 +32,6 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return View(rows);
         }
 
-        // GET: /ActorMovies/Details?actorId=1&movieId=2
         public async Task<IActionResult> Details(int actorId, int movieId)
         {
             var vm = await _context.ActorMovies
@@ -51,14 +50,13 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return View(vm);
         }
 
-        // GET: /ActorMovies/Create
         public async Task<IActionResult> Create()
         {
             await LoadDropdowns();
             return View(new ActorMovie());
         }
 
-        // POST: /ActorMovies/Create
+        //POST:
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] int ActorId, [FromForm] int MovieId)
@@ -77,7 +75,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /ActorMovies/Edit?actorId=1&movieId=2
+        //GET:
         public async Task<IActionResult> Edit(int actorId, int movieId)
         {
             var exists = await _context.ActorMovies
@@ -86,7 +84,6 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             if (!exists) return NotFound();
 
             await LoadDropdowns(actorId, movieId);
-            // We send back the original keys in hidden fields
             return View(new ActorMovieEditVM
             {
                 OriginalActorId = actorId,
@@ -96,12 +93,11 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             });
         }
 
-        // POST: /ActorMovies/Edit
+        //POST:
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromForm] ActorMovieEditVM vm)
         {
-            // Validate the *new* chosen pair
             await ValidatePair(vm.ActorId, vm.MovieId, vm.OriginalActorId, vm.OriginalMovieId);
             if (!ModelState.IsValid)
             {
@@ -109,11 +105,9 @@ namespace Fall2025_Project3_amstephenson3.Controllers
                 return View(vm);
             }
 
-            // If unchanged, just redirect
             if (vm.ActorId == vm.OriginalActorId && vm.MovieId == vm.OriginalMovieId)
                 return RedirectToAction(nameof(Index));
 
-            // Composite PK can't be updated: remove old row, add new row (transactionally safe enough here)
             var old = await _context.ActorMovies.FindAsync(vm.OriginalActorId, vm.OriginalMovieId);
             if (old != null) _context.ActorMovies.Remove(old);
 
@@ -123,7 +117,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /ActorMovies/Delete?actorId=1&movieId=2
+        //GET:
         public async Task<IActionResult> Delete(int actorId, int movieId)
         {
             var row = await _context.ActorMovies
@@ -142,7 +136,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return View(row);
         }
 
-        // POST: /ActorMovies/Delete
+        //POST:
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int actorId, int movieId)
@@ -156,7 +150,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ---- helpers ---------------------------------------------------------
+        //helpers
 
         private async Task ValidatePair(int actorId, int movieId, int? originalActorId = null, int? originalMovieId = null)
         {
@@ -168,7 +162,6 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             if (!await _context.Movies.AnyAsync(m => m.Id == movieId))
                 ModelState.AddModelError(nameof(ActorMovie.MovieId), "Movie not found.");
 
-            // Only check for duplicates if the pair changed or it's a create
             var isSameAsOriginal = originalActorId.HasValue && originalMovieId.HasValue &&
                                    actorId == originalActorId.Value && movieId == originalMovieId.Value;
 
@@ -189,7 +182,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
         }
     }
 
-    // Row view model for Index/Details/Delete
+    //Row view model for Index/Details/Delete
     public class ActorMovieRowVM
     {
         public int ActorId { get; set; }
@@ -198,7 +191,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
         public string MovieTitle { get; set; } = string.Empty;
     }
 
-    // Edit view model (so we can carry original composite PK)
+    //Edit view model
     public class ActorMovieEditVM
     {
         public int OriginalActorId { get; set; }

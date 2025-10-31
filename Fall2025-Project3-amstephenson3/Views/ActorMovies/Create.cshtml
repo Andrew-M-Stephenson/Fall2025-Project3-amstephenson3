@@ -5,7 +5,7 @@
 <h1>Add Relationship</h1>
 <hr />
 
-<!-- Explicit path + post + novalidate to avoid client-side blockers -->
+<!--Post-->
 <form id="amForm" action="/ActorMovies/Create" method="post" novalidate>
     @Html.AntiForgeryToken()
 
@@ -24,17 +24,14 @@
 </form>
 
 @section Scripts {
-    <!-- DO NOT load validation scripts yet; we want a raw submit -->
-    @* @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } *@
 
     <script>
-        // Log & force submit in case any script calls preventDefault
         const f = document.getElementById('amForm');
         const btn = document.getElementById('saveBtn');
         f.addEventListener('submit', (e) => console.log('submit fired; action=', f.action));
         btn.addEventListener('click', (e) => {
           console.log('Save clicked — forcing submit');
-          f.submit(); // bypass any preventDefault
+          f.submit();
         });
     </script>
 }

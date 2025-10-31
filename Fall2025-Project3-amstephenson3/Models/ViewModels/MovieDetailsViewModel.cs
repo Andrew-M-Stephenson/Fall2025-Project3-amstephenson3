@@ -1,4 +1,4 @@
-﻿// Models/ViewModels/MovieDetailsViewModel.cs
+﻿//Models/ViewModels/MovieDetailsViewModel.cs
 using Fall2025_Project3_amstephenson3.Models;
 
 namespace Fall2025_Project3_amstephenson3.Models.ViewModels

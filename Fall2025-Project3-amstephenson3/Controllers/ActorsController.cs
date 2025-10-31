@@ -22,14 +22,13 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             _aiTweets = aiTweets;
         }
 
-        // GET: Actors
+        //GET:
         public async Task<IActionResult> Index()
         {
             var actors = await _context.Actors.AsNoTracking().ToListAsync();
             return View(actors);
         }
 
-        // GET: Actors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -42,11 +41,10 @@ namespace Fall2025_Project3_amstephenson3.Controllers
 
             if (actor == null) return NotFound();
 
-            // Generate 20 tweets in ONE OpenAI call, with optional movie context
+            //Generate tweets
             var movieTitles = actor.ActorMovies.Select(am => am.Movie.Title);
             var tweets = await _aiTweets.GenerateTweetsAsync(actor.Name, movieTitles);
 
-            // Sentiment with Vader
             var analyzer = new SentimentIntensityAnalyzer();
             var scored = tweets.Select(t =>
             {
@@ -79,10 +77,10 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return View(vm);
         }
 
-        // GET: Actors/Create
+        //GET:
         public IActionResult Create() => View();
 
-        // POST: Actors/Create
+        //POST:
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Gender,Age,ImdbUrl")] Actor actor, IFormFile? photoFile)
@@ -102,7 +100,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Actors/Edit/5
+        //GET:
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -111,7 +109,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return View(actor);
         }
 
-        // POST: Actors/Edit/5
+        //POST:
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Gender,Age,ImdbUrl")] Actor input, IFormFile? photoFile)
@@ -140,7 +138,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Actors/Delete/5
+        //GET:
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -151,7 +149,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return View(actor);
         }
 
-        // POST: Actors/Delete/5
+        //POST:
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -165,7 +163,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Stream the actor photo
+        //actor photo
         [AllowAnonymous]
         public async Task<IActionResult> Photo(int id)
         {
@@ -177,7 +175,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
         }
     }
 
-    // ViewModel used by Details
+    //ViewModel used by Details
     public class ActorDetailsViewModel
     {
         public Actor Actor { get; set; } = default!;

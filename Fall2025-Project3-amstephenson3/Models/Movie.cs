@@ -19,10 +19,9 @@ namespace Fall2025_Project3_amstephenson3.Models
         [Display(Name = "Year of Release")]
         public int? Year { get; set; }
 
-        // Poster stored in DB as bytes
+        //poster stored in DB
         public byte[]? Poster { get; set; }
 
-        // Optional: store content type so you can serve it back correctly
         public string? PosterContentType { get; set; }
 
         public ICollection<ActorMovie> ActorMovies { get; set; } = new List<ActorMovie>();

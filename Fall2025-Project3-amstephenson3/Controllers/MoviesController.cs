@@ -24,15 +24,13 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             _aiReviews = aiReviews;
         }
 
-        // GET: Movies
+        //GET:
         public async Task<IActionResult> Index()
         {
             var movies = await _context.Movies.AsNoTracking().ToListAsync();
             return View(movies);
         }
 
-        // GET: Movies/Details/5
-        // Builds MovieDetailsViewModel, calls Azure OpenAI once for 10 reviews, and scores with VaderSharp2
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -43,17 +41,16 @@ namespace Fall2025_Project3_amstephenson3.Controllers
 
             if (movie == null) return NotFound();
 
-            // Cast (actor names) via join table
+            //cast
             var cast = await _context.ActorMovies
                 .Where(am => am.MovieId == movie.Id)
                 .Include(am => am.Actor)
                 .Select(am => am.Actor.Name)
                 .ToListAsync();
 
-            // Call AI once to get 10 mini-reviews (robust service already handles JSON parsing)
+            //ai call for reviews
             var reviews = await _aiReviews.GenerateReviewsAsync(movie.Title, cast);
 
-            // Score with VaderSharp2
             var analyzer = new SentimentIntensityAnalyzer();
             var scored = reviews
                 .Select(text =>
@@ -91,23 +88,23 @@ namespace Fall2025_Project3_amstephenson3.Controllers
                 OverallLabel = overall
             };
 
-            return View(vm); // View expects MovieDetailsViewModel (your updated Details.cshtml)
+            return View(vm);
         }
 
-        // GET: Movies/Create
+        //GET:
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Movies/Create
+        //POST:
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             [Bind("Title,ImdbUrl,Genre,Year")] Movie movie,
             IFormFile? posterFile)
         {
-            // Handle poster upload
+            //pictures
             if (posterFile is not null && posterFile.Length > 0)
             {
                 using var ms = new System.IO.MemoryStream();
@@ -126,7 +123,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Movies/Edit/5
+        //GET:
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -137,7 +134,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return View(movie);
         }
 
-        // POST: Movies/Edit/5
+        //POST:
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
@@ -155,13 +152,12 @@ namespace Fall2025_Project3_amstephenson3.Controllers
                 return View(input);
             }
 
-            // Update scalar fields
             movie.Title = input.Title;
             movie.ImdbUrl = input.ImdbUrl;
             movie.Genre = input.Genre;
             movie.Year = input.Year;
 
-            // Optional new poster
+            //new poster
             if (posterFile is not null && posterFile.Length > 0)
             {
                 using var ms = new System.IO.MemoryStream();
@@ -183,7 +179,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             }
         }
 
-        // GET: Movies/Delete/5
+        //GET:
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -197,7 +193,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return View(movie);
         }
 
-        // POST: Movies/Delete/5
+        //POST:
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -211,7 +207,7 @@ namespace Fall2025_Project3_amstephenson3.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Stream the poster bytes
+        //post picture
         [AllowAnonymous]
         public async Task<IActionResult> Poster(int id)
         {
