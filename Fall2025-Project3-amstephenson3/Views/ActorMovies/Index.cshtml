@@ -1,72 +1,128 @@
 ﻿@model IEnumerable<Fall2025_Project3_amstephenson3.Controllers.ActorMovieRowVM>
 
 @{
-    ViewData["Title"] = "Actor–Movie";
+    ViewData["Title"] = "Actor–Movie Relationships";
 }
 
-<h1>Actor–Movie</h1>
+<div class="container py-4">
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">Add Relationship</a>
-</p>
+    <!--HEADER-->
+    <div class="row justify-content-between align-items-center mb-4">
+        <div class="col-lg-8">
+            <h1 class="mb-2">Actor–Movie Relationships</h1>
+            <p class="text-muted mb-0">
+                Manage the many-to-many links between actors and movies. Each relationship connects one actor
+                to one movie, helping power cast lists and filmographies across the site.
+            </p>
+        </div>
+        <div class="col-lg-4 mt-3 mt-lg-0 d-flex justify-content-lg-end justify-content-start">
+            <a class="btn btn-info btn-lg text-white" asp-action="Create">
+                + Add Relationship
+            </a>
+        </div>
+    </div>
 
-@if (ViewData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
-{
-    <div class="alert alert-danger">@err</div>
-}
+    <!--ERROR MESSAGE-->
+    @if (ViewData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
+    {
+        <div class="alert alert-danger">
+            @err
+        </div>
+    }
 
-@if (Model is null || !Model.Any())
-{
-    <div class="alert alert-info">No relationships yet. Click <strong>Add Relationship</strong> to create one.</div>
-}
-else
-{
-    <table id="grid" class="table table-striped align-middle">
-        <thead>
-            <tr>
-                <th>Actor</th>
-                <th>Movie</th>
-                <th style="width: 220px;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        <a asp-controller="Actors" asp-action="Details" asp-route-id="@item.ActorId">
-                            @item.ActorName
-                        </a>
-                    </td>
-                    <td>
-                        <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.MovieId">
-                            @item.MovieTitle
-                        </a>
-                    </td>
-                    <td>
-                        <a class="btn btn-sm btn-outline-secondary"
-                           asp-action="Details"
-                           asp-route-actorId="@item.ActorId"
-                           asp-route-movieId="@item.MovieId">Details</a>
+    <!--STATS BAR-->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex flex-wrap gap-3 p-3 rounded-3 bg-light border">
+                <div>
+                    <span class="fw-semibold">Total relationships:</span>
+                    <span class="badge bg-info-subtle text-info border border-info-subtle ms-1">
+                        @(Model?.Count() ?? 0)
+                    </span>
+                </div>
+                <div class="text-muted small">
+                    Tip: Click an actor or movie name to jump to its details page. Use this page to keep links
+                    clean and avoid duplicates.
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <a class="btn btn-sm btn-outline-primary ms-1"
-                           asp-action="Edit"
-                           asp-route-actorId="@item.ActorId"
-                           asp-route-movieId="@item.MovieId">Edit</a>
+    <!--TABLE-->
+    @if (Model is null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            No relationships yet. Click <strong>Add Relationship</strong> to create the first link.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Actor–Movie links</h5>
+                    <span class="text-muted small">
+                        Search and sort to quickly find specific actor–movie combinations.
+                    </span>
+                </div>
 
-                        <a class="btn btn-sm btn-outline-danger ms-1"
-                           asp-action="Delete"
-                           asp-route-actorId="@item.ActorId"
-                           asp-route-movieId="@item.MovieId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+                <table id="grid" class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Actor</th>
+                            <th>Movie</th>
+                            <th style="width: 220px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="Actors" asp-action="Details" asp-route-id="@item.ActorId">
+                                        @item.ActorName
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.MovieId">
+                                        @item.MovieTitle
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-secondary"
+                                       asp-action="Details"
+                                       asp-route-actorId="@item.ActorId"
+                                       asp-route-movieId="@item.MovieId">Details</a>
+
+                                    <a class="btn btn-sm btn-outline-primary ms-1"
+                                       asp-action="Edit"
+                                       asp-route-actorId="@item.ActorId"
+                                       asp-route-movieId="@item.MovieId">Edit</a>
+
+                                    <a class="btn btn-sm btn-outline-danger ms-1"
+                                       asp-action="Delete"
+                                       asp-route-actorId="@item.ActorId"
+                                       asp-route-movieId="@item.MovieId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+</div>
 
 @section Scripts {
     <script>
-        $(function () { $('#grid').DataTable({ paging: true, searching: true, order: [], autoWidth: false }); });
+        $(function () {
+            $('#grid').DataTable({
+                paging: true,
+                searching: true,
+                order: [],
+                autoWidth: false
+            });
+        });
     </script>
 }
